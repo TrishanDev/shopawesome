@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ShopAwesome{% endblock %}</title>
@@ -19,7 +20,12 @@
                 <a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart 
                     <span class="cart-count">{{ session['cart']|length if session.get('cart') else 0 }}</span>
                 </a>
-                <a href="#"><i class="fas fa-user"></i> Account</a>
+                {% if session.get('user') %}
+                    <a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a>
+                    <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}"><i class="fas fa-user"></i> Login</a>
+                {% endif %}
             </nav>
             <button class="mobile-menu-toggle" id="mobile-menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -44,22 +50,11 @@
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
             </div>
-            <p class="copyright">&copy; 2025 ShopAwesome. All rights reserved.</p>
+            <p class="copyright">© 2025 ShopAwesome. All rights reserved.</p>
         </div>
     </footer>
 
-    <script>
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const nav = document.querySelector('nav');
-        
-        if (mobileMenuToggle) {
-            mobileMenuToggle.addEventListener('click', () => {
-                nav.classList.toggle('active');
-            });
-        }
-    </script>
-    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
