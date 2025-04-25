@@ -3,6 +3,10 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
+
+
 # Sample product data with more details
 products = [
     {
