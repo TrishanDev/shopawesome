@@ -23,7 +23,7 @@ pillow==11.2.1
 openai==1.74.0
 pydantic==2.11.3
 pyyaml==6.0.2
-pywin32
+pywin32 ==3.04
 pyinstaller==6.13.0
 pyperclip==1.9.0
 flask-cors==3.1.1
