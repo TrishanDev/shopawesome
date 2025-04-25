@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const nav = document.querySelector('nav');
     
@@ -9,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Close mobile menu when clicking outside
     document.addEventListener('click', function(event) {
         const isClickInsideNav = nav.contains(event.target);
         const isClickOnToggle = mobileMenuToggle.contains(event.target);
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Add animation to elements with animate-fadeIn class
     const animatedElements = document.querySelectorAll('.animate-fadeIn');
     animatedElements.forEach(element => {
         element.style.opacity = '0';
