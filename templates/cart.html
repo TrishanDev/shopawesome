@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}ShopAwesome - Your Cart{% endblock %}
+
+{% block content %}
+<section class="cart-section animate-fadeIn">
+    <h1 class="section-title">Your Shopping Cart</h1>
+    
+    {% if session.get('cart') %}
+        <div class="cart-container">
+            {% for item in session['cart'] %}
+                <div class="cart-item">
+                    <img src="{{ url_for('static', filename='images/product' + item.id|string + '.jpg') }}" 
+                         alt="{{ item.name }}" class="cart-item-image">
+                    
+                    <div class="cart-item-details">
+                        <h3 class="cart-item-title">{{ item.name }}</h3>
+                        <p class="cart-item-price">${{ item.price }}</p>
+                    </div>
+                    
+                    <div class="cart-item-quantity">
+                        <button onclick="updateQuantity({{ item.id }}, {{ item.quantity|default(1) - 1 }})" 
+                                {{ 'disabled' if item.quantity|default(1) <= 1 }}>-</button>
+                        <span id="quantity-{{ item.id }}">{{ item.quantity|default(1) }}</span>
+                        <button onclick="updateQuantity({{ item.id }}, {{ item.quantity|default(1) + 1 }})">+</button>
+                    </div>
+                    
+                    <button class="btn btn-outline" onclick="removeFromCart({{ item.id }})">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+            {% endfor %}
+            
+            <div class="cart-total">
+                <div class="cart-total-title">Total:</div>
+                <div class="cart-total-price" id="cart-total">${{ total }}</div>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-3">
+                <a href="{{ url_for('home') }}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+                <a href="{{ url_for('checkout') }}" class="btn btn-secondary">
+                    <i class="fas fa-check"></i> Proceed to Checkout
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="empty-cart text-center">
+            <i class="fas fa-shopping-cart fa-5x mb-3" style="color: var(--color-gray-light);"></i>
+            <h2>Your cart is empty</h2>
+            <p>Add some products to your cart and come back!</p>
+            <a href="{{ url_for('home') }}" class="btn mt-3">Start Shopping</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function removeFromCart(productId) {
+        fetch('/remove_from_cart/' + productId, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload();
+            }
+        });
+    }
+    
+    function updateQuantity(productId, newQuantity) {
+        if (newQuantity < 1) return;
+        
+        fetch('/update_cart_quantity/' + productId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                quantity: newQuantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('quantity-' + productId).textContent = newQuantity;
+                // In a real app, you would update the total price
+                // without reloading the page
+                window.location.reload();
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}ShopAwesome - Home{% endblock %}
+
+{% block content %}
+<section class="hero animate-fadeIn">
+    <h1 class="section-title">Featured Products</h1>
+    <p class="text-center mb-3">Discover our premium collection of top-quality products</p>
+    
+    <div class="product-container">
+        {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ url_for('static', filename='images/product' + product.id|string + '.jpg') }}" alt="{{ product.name }}">
+                </div>
+                <div class="product-details">
+                    <h3 class="product-title">{{ product.name }}</h3>
+                    <p class="product-price">${{ product.price }}</p>
+                    <p class="product-description">{{ product.description }}</p>
+                    <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

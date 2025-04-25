@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}ShopAwesome - Checkout{% endblock %}
+
+{% block content %}
+<section class="checkout-section animate-fadeIn">
+    <h1 class="section-title">Checkout</h1>
+    
+    <div class="checkout-form">
+        <form method="POST" action="{{ url_for('checkout') }}">
+            <div class="order-summary mb-3">
+                <h3 class="mb-2">Order Summary</h3>
+                <div class="order-items">
+                    {% for item in cart %}
+                        <div class="order-item d-flex justify-content-between mb-1">
+                            <span>{{ item.name }} x {{ item.quantity|default(1) }}</span>
+                            <span>${{ (item.price * item.quantity|default(1))|round(2) }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="order-total d-flex justify-content-between mt-2">
+                    <strong>Total:</strong>
+                    <strong>${{ total }}</strong>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="mb-2">Shipping Information</h3>
+                
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" id="address" name="address" class="form-control" required>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <div class="form-group w-100">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" id="city" name="city" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group w-100">
+                        <label for="zip" class="form-label">ZIP Code</label>
+                        <input type="text" id="zip" name="zip" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="mb-2">Payment Method</h3>
+                <div class="form-group">
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" id="credit-card" name="payment" value="credit-card" checked>
+                            <label for="credit-card">Credit Card</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="paypal" name="payment" value="paypal">
+                            <label for="paypal">PayPal</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="credit-card-fields">
+                    <div class="form-group">
+                        <label for="card-number" class="form-label">Card Number</label>
+                        <input type="text" id="card-number" name="card-number" class="form-control" placeholder="XXXX XXXX XXXX XXXX">
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <div class="form-group w-100">
+                            <label for="expiry" class="form-label">Expiry Date</label>
+                            <input type="text" id="expiry" name="expiry" class="form-control" placeholder="MM/YY">
+                        </div>
+                        
+                        <div class="form-group w-100">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" id="cvv" name="cvv" class="form-control" placeholder="XXX">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-secondary w-100 mt-3">
+                <i class="fas fa-lock"></i> Place Order
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Toggle payment fields based on selected payment method
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const creditCardFields = document.getElementById('credit-card-fields');
+            if (this.value === 'credit-card') {
+                creditCardFields.style.display = 'block';
+            } else {
+                creditCardFields.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
