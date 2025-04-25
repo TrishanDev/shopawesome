@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - ShopAwesome{% endblock %}
+
+{% block content %}
+<section class="animate-fadeIn">
+    <div class="cart-container">
+        <h2 class="section-title">Your Profile</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="profile-details">
+            <p><strong>Name:</strong> {{ user.name }}</p>
+            <p><strong>Username:</strong> {{ session['user'] }}</p>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline mt-2">Logout</a>
+    </div>
+</section>
+{% endblock %}
